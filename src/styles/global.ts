@@ -12,7 +12,7 @@ export default createGlobalStyle`
 }
 body{
   -webkit-font-smoothing: antialiased !important;
-  background: linear-gradient(329.54deg, #29B6D1 0%, #00C7C7 100%);
+  background : #ebf2f5;
   color : #fff;
 }
 body,input,button{
@@ -20,7 +20,7 @@ body,input,button{
   font-family: 'Nunito', serif;
 }
 h1,h2,h3,h4,h5,h6 strong{
-  font-weight : 500;
+  font-weight : 400;
 }
 a{
   text-decoration : none;
