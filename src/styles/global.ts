@@ -12,12 +12,12 @@ export default createGlobalStyle`
 }
 body{
   -webkit-font-smoothing: antialiased !important;
-  background  : #312E38;
+  background: linear-gradient(329.54deg, #29B6D1 0%, #00C7C7 100%);
   color : #fff;
 }
 body,input,button{
   font-size : 16px;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Nunito', serif;
 }
 h1,h2,h3,h4,h5,h6 strong{
   font-weight : 500;

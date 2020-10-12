@@ -2,7 +2,7 @@ import React from 'react';
 
 // import { Container } from './styles';
 
-const Dashboard: React.FC = () => {
+const Home: React.FC = () => {
   return (
     <div>
       <h1>dash</h1>
@@ -10,4 +10,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default Home;
