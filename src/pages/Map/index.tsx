@@ -21,8 +21,20 @@ const mapIcon = Leaflet.icon({
   popupAnchor: [170, 2],
 });
 
+interface OrphanageProps {
+  latitude: number;
+  longitude: number;
+  id: string;
+  name: string;
+  about: string;
+  instructions: string;
+  open_on_weekends: string;
+  open_hours: string;
+}
+
 const MapOrphanages: React.FC = () => {
-  const [orphanages, setOrphanages] = useState([]);
+  const [orphanages, setOrphanages] = useState<OrphanageProps[]>([]);
+
   useEffect(() => {
     async function loadOrphanages(): Promise<void> {
       const response = await api.get('orphanages');
@@ -31,7 +43,8 @@ const MapOrphanages: React.FC = () => {
     }
 
     loadOrphanages();
-  });
+  }, []);
+
   return (
     <Container>
       <aside>
@@ -56,6 +69,22 @@ const MapOrphanages: React.FC = () => {
         <TileLayer
           url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
         />
+        {orphanages.length > 0 &&
+          orphanages.map(o => (
+            <Marker icon={mapIcon} position={[o.latitude, o.longitude]}>
+              <Popup
+                className="marker-poppup"
+                minWidth={240}
+                maxWidth={240}
+                closeButton={false}
+              >
+                Lar das meninas
+                <Link to="Orphanage/123123123">
+                  <FiArrowRight size={20} color="#fff" />
+                </Link>
+              </Popup>
+            </Marker>
+          ))}
         <Marker icon={mapIcon} position={[-4.2522844, -43.9350125]}>
           <Popup
             className="marker-poppup"
