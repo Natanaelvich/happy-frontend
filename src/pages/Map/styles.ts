@@ -39,6 +39,36 @@ export const Container = styled.div`
       }
     }
   }
+
+  .marker-poppup .leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 20px rgba(23, 142, 166, 0.16);
+    border-radius: 20px;
+    margin-left: 12px;
+  }
+  .marker-poppup .leaflet-popup-content {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 27px;
+    color: #0089a5;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      background: #15c3d6;
+      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .marker-poppup .leaflet-popup-tip-container {
+    display: none;
+  }
 `;
 
 export const ButtonPlus = styled(Link)`
