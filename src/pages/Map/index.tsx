@@ -71,33 +71,24 @@ const MapOrphanages: React.FC = () => {
         />
         {orphanages.length > 0 &&
           orphanages.map(o => (
-            <Marker icon={mapIcon} position={[o.latitude, o.longitude]}>
+            <Marker
+              key={o.id}
+              icon={mapIcon}
+              position={[o.latitude, o.longitude]}
+            >
               <Popup
                 className="marker-poppup"
                 minWidth={240}
                 maxWidth={240}
                 closeButton={false}
               >
-                Lar das meninas
-                <Link to="Orphanage/123123123">
+                {o.name}
+                <Link to={`Orphanage/${o.id}`}>
                   <FiArrowRight size={20} color="#fff" />
                 </Link>
               </Popup>
             </Marker>
           ))}
-        <Marker icon={mapIcon} position={[-4.2522844, -43.9350125]}>
-          <Popup
-            className="marker-poppup"
-            minWidth={240}
-            maxWidth={240}
-            closeButton={false}
-          >
-            Lar das meninas
-            <Link to="Orphanage/123123123">
-              <FiArrowRight size={20} color="#fff" />
-            </Link>
-          </Popup>
-        </Marker>
       </Map>
       <ButtonPlus to="orphanage_create">
         <FaPlus size={32} color="#fff" />
