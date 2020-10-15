@@ -25,7 +25,7 @@ interface LocationProps {
 }
 
 const CreateOrphanage: React.FC = () => {
-  const { goBack } = useHistory();
+  const history = useHistory();
 
   const [location, setLocation] = useState<LocationProps>({
     latitude: 0,
@@ -84,6 +84,8 @@ const CreateOrphanage: React.FC = () => {
     images.map(i => data.append('images', i));
 
     await api.post('orphanages', data);
+
+    history.push('map');
   }
 
   return (
@@ -92,7 +94,7 @@ const CreateOrphanage: React.FC = () => {
         <img src={mapMarkerImg} alt="Happy" />
 
         <footer>
-          <button type="button" onClick={goBack}>
+          <button type="button" onClick={history.goBack}>
             <FiArrowLeft size={24} color="#FFF" />
           </button>
         </footer>

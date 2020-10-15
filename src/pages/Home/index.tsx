@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
@@ -6,6 +6,13 @@ import { Container, ContentWrapper, EnterApp, Location } from './styles';
 import Logo from '../../assets/Logo.svg';
 
 const Home: React.FC = () => {
+  const [cidadeEstado, setCidadeEstado] = useState('');
+  useEffect(() => {
+    const cityStorage = localStorage.getItem('@happy:city');
+    if (cityStorage) {
+      setCidadeEstado(cityStorage);
+    }
+  }, []);
   return (
     <Container>
       <ContentWrapper>
@@ -22,8 +29,7 @@ const Home: React.FC = () => {
           </EnterApp>
         </Link>
         <Location>
-          <strong>Timbiras</strong>
-          Maranhão
+          <strong>{cidadeEstado || 'Entre e escolha sua cidade'}</strong>
         </Location>
       </ContentWrapper>
     </Container>

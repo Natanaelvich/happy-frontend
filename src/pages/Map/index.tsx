@@ -40,15 +40,20 @@ interface LocationProps {
 const MapOrphanages: React.FC = () => {
   const [orphanages, setOrphanages] = useState<OrphanageProps[]>([]);
   const [cep, setCep] = useState('');
+  const [cidadeEstado, setCidadeEstado] = useState('');
   const [location, setLocation] = useState<LocationProps>({
     latitude: undefined,
     longitude: undefined,
   });
   useEffect(() => {
     const locationStorage = localStorage.getItem('@happy:location');
+    const cityStorage = localStorage.getItem('@happy:city');
 
     if (locationStorage) {
       setLocation(JSON.parse(locationStorage));
+    }
+    if (cityStorage) {
+      setCidadeEstado(cityStorage);
     }
   }, []);
 
@@ -71,6 +76,9 @@ const MapOrphanages: React.FC = () => {
 
     const city = cidade.data.results[0].formatted_address.split(',')[0];
 
+    localStorage.setItem('@happy:city', city);
+
+    setCidadeEstado(city);
     const cityCoords = await api.post(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${process.env.REACT_APP_GOOGLE_MAP_TOKEN}`,
     );
@@ -100,8 +108,7 @@ const MapOrphanages: React.FC = () => {
         </header>
 
         <footer>
-          <strong>Timbiras</strong>
-          <span>Maranhão</span>
+          <strong>{cidadeEstado || 'Cidade ainda não escolhida'}</strong>
         </footer>
       </aside>
 
