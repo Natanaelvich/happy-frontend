@@ -69,6 +69,46 @@ export const Container = styled.div`
   .marker-poppup .leaflet-popup-tip-container {
     display: none;
   }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    label {
+      display: flex;
+      color: #8fa7b3;
+      margin-bottom: 8px;
+      line-height: 24px;
+      font-size: 24px;
+    }
+
+    input {
+      max-width: 460px;
+      width: 100%;
+      background: #f5f8fa;
+      border: 1px solid #d3e2e5;
+      border-radius: 20px;
+      outline: none;
+      color: #5c8599;
+      height: 44px;
+      padding: 0 16px;
+    }
+
+    button {
+      margin-top: 12px;
+      border-radius: 20px;
+      height: 44px;
+      cursor: pointer;
+      background: #edfff6;
+      border: 1px solid #a1e9c5;
+      color: #37c77f;
+      max-width: 460px;
+      width: 100%;
+    }
+  }
 `;
 
 export const ButtonPlus = styled(Link)`

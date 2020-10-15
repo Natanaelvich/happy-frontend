@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
@@ -31,9 +32,25 @@ interface OrphanageProps {
   open_on_weekends: string;
   open_hours: string;
 }
+interface LocationProps {
+  latitude: number | undefined;
+  longitude: number | undefined;
+}
 
 const MapOrphanages: React.FC = () => {
   const [orphanages, setOrphanages] = useState<OrphanageProps[]>([]);
+  const [cep, setCep] = useState('');
+  const [location, setLocation] = useState<LocationProps>({
+    latitude: undefined,
+    longitude: undefined,
+  });
+  useEffect(() => {
+    const locationStorage = localStorage.getItem('@happy:location');
+
+    if (locationStorage) {
+      setLocation(JSON.parse(locationStorage));
+    }
+  }, []);
 
   useEffect(() => {
     async function loadOrphanages(): Promise<void> {
@@ -45,13 +62,40 @@ const MapOrphanages: React.FC = () => {
     loadOrphanages();
   }, []);
 
+  async function handleSubmit(e: FormEvent): Promise<void> {
+    e.preventDefault();
+
+    const cidade = await api.post(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${process.env.REACT_APP_GOOGLE_MAP_TOKEN}`,
+    );
+
+    const city = cidade.data.results[0].formatted_address.split(',')[0];
+
+    const cityCoords = await api.post(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${process.env.REACT_APP_GOOGLE_MAP_TOKEN}`,
+    );
+
+    const locationCoords = cityCoords.data.results[0].geometry.location;
+
+    localStorage.setItem(
+      '@happy:location',
+      JSON.stringify({
+        latitude: locationCoords.lat,
+        longitude: locationCoords.lng,
+      }),
+    );
+    setLocation({
+      latitude: locationCoords.lat,
+      longitude: locationCoords.lng,
+    });
+  }
   return (
     <Container>
       <aside>
         <header>
           <img src={marcker} alt="marcker" />
 
-          <h2>Escolha um orfanato no mapa</h2>
+          {location.latitude && <h2>Escolha um orfanato no mapa</h2>}
           <p>Muitas crianças estão esperando a sua visita :)</p>
         </header>
 
@@ -61,35 +105,47 @@ const MapOrphanages: React.FC = () => {
         </footer>
       </aside>
 
-      <Map
-        center={[-4.2522844, -43.9350125]}
-        zoom={15}
-        style={{ width: '100%', height: '100%' }}
-      >
-        <TileLayer
-          url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-        />
-        {orphanages.length > 0 &&
-          orphanages.map(o => (
-            <Marker
-              key={o.id}
-              icon={mapIcon}
-              position={[o.latitude, o.longitude]}
-            >
-              <Popup
-                className="marker-poppup"
-                minWidth={240}
-                maxWidth={240}
-                closeButton={false}
+      {location.latitude ? (
+        <Map
+          center={[-4.2522844, -43.9350125]}
+          zoom={15}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <TileLayer
+            url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+          />
+          {orphanages.length > 0 &&
+            orphanages.map(o => (
+              <Marker
+                key={o.id}
+                icon={mapIcon}
+                position={[o.latitude, o.longitude]}
               >
-                {o.name}
-                <Link to={`Orphanage/${o.id}`}>
-                  <FiArrowRight size={20} color="#fff" />
-                </Link>
-              </Popup>
-            </Marker>
-          ))}
-      </Map>
+                <Popup
+                  className="marker-poppup"
+                  minWidth={240}
+                  maxWidth={240}
+                  closeButton={false}
+                >
+                  {o.name}
+                  <Link to={`Orphanage/${o.id}`}>
+                    <FiArrowRight size={20} color="#fff" />
+                  </Link>
+                </Popup>
+              </Marker>
+            ))}
+        </Map>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="cep">Digite seu CEP</label>
+          <input
+            id="cep"
+            value={cep}
+            onChange={text => setCep(text.target.value)}
+          />
+          <button type="submit">Buscar</button>
+        </form>
+      )}
       <ButtonPlus to="orphanage_create">
         <FaPlus size={32} color="#fff" />
       </ButtonPlus>

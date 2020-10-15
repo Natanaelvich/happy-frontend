@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import L, { LeafletMouseEvent } from 'leaflet';
 import { useHistory } from 'react-router-dom';
@@ -39,6 +39,14 @@ const CreateOrphanage: React.FC = () => {
   const [open_hours, setOpen_hours] = useState('');
   const [images, setImages] = useState<File[]>([]);
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
+
+  useEffect(() => {
+    const locationStorage = localStorage.getItem('@happy:location');
+
+    if (locationStorage) {
+      setLocation(JSON.parse(locationStorage));
+    }
+  }, []);
 
   function handleSelectImages(e: ChangeEvent<HTMLInputElement>): void {
     if (!e.target.files) {
@@ -97,7 +105,7 @@ const CreateOrphanage: React.FC = () => {
 
             <Map
               onclick={handleMapClick}
-              center={[-27.2092052, -49.6401092]}
+              center={[location.latitude, location.longitude]}
               style={{ width: '100%', height: 280 }}
               zoom={15}
             >
