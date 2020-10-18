@@ -25,10 +25,6 @@ interface LocationProps {
   longitude: string;
   id: string;
 }
-interface LocationSocketProps {
-  latitude: string;
-  longitude: string;
-}
 
 const MapBgLocation: React.FC = () => {
   const [locations, setlocations] = useState<LocationProps[]>([]);
@@ -40,7 +36,7 @@ const MapBgLocation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    socket.on('location', (location: any) => {
+    socket.on('location', (location: string) => {
       setlocations(oldLocations => {
         return [
           ...oldLocations,
@@ -67,7 +63,10 @@ const MapBgLocation: React.FC = () => {
     <Container>
       {locations.length > 0 && (
         <Map
-          center={[-4.2522844, -43.9350125]}
+          center={[
+            Number(locations[0].latitude),
+            Number(locations[0].longitude),
+          ]}
           zoom={15}
           style={{ width: '100%', height: '100%' }}
         >
