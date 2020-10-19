@@ -13,9 +13,9 @@ import api from '../../services/api';
 
 const mapIcon = Leaflet.icon({
   iconUrl: marcker,
-  iconSize: [58, 68],
+  iconSize: [28, 38],
 
-  iconAnchor: [29, 68],
+  iconAnchor: [29, 38],
 
   popupAnchor: [170, 2],
 });
