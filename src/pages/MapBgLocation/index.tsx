@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Map, TileLayer, Marker } from 'react-leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import Leaflet from 'leaflet';
 import io from 'socket.io-client';
+import { getHours, getMinutes } from 'date-fns';
 import { Container } from './styles';
 
 import 'leaflet/dist/leaflet.css';
@@ -24,6 +25,7 @@ interface LocationProps {
   latitude: string;
   longitude: string;
   id: string;
+  created_at: Date;
 }
 
 const MapBgLocation: React.FC = () => {
@@ -43,6 +45,7 @@ const MapBgLocation: React.FC = () => {
           {
             ...JSON.parse(location),
             id: String(Date.now()),
+            created_at: new Date(Date.now()),
           },
         ];
       });
@@ -79,7 +82,17 @@ const MapBgLocation: React.FC = () => {
               key={o.id}
               icon={mapIcon}
               position={[Number(o.latitude), Number(o.longitude)]}
-            />
+            >
+              <Popup
+                className="marker-poppup"
+                minWidth={240}
+                maxWidth={240}
+                closeButton={false}
+              >
+                {getHours(new Date(o.created_at))} {' : '}
+                {getMinutes(new Date(o.created_at))} Min
+              </Popup>
+            </Marker>
           ))}
         </Map>
       )}
