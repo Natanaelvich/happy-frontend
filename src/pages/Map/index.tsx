@@ -114,7 +114,7 @@ const MapOrphanages: React.FC = () => {
 
       {location.latitude ? (
         <Map
-          center={[-4.2522844, -43.9350125]}
+          center={[location?.latitude, location?.longitude]}
           zoom={15}
           style={{ width: '100%', height: '100%' }}
         >
