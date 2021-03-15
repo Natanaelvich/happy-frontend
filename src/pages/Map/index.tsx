@@ -42,8 +42,8 @@ const MapOrphanages: React.FC = () => {
   const [cep, setCep] = useState('');
   const [cidadeEstado, setCidadeEstado] = useState('');
   const [location, setLocation] = useState<LocationProps>({
-    latitude: undefined,
-    longitude: undefined,
+    latitude: -4.2550141,
+    longitude: -43.9546262,
   });
   useEffect(() => {
     const locationStorage = localStorage.getItem('@happy:location');
